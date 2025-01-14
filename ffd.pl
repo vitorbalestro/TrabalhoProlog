@@ -8,9 +8,9 @@ container(10, 10, 10).
 % Cada box segue o mesmo formato do
 % container: (Width, Height, Depth).
 boxes([
-    box(2, 2, 2),
-    box(1, 1, 1),
-    box(3, 3, 3)
+    box(2, 3, 5),
+    box(1, 2, 4),
+    box(3, 4, 5)
 ]).
 
 % ---------------------------------------------------------
@@ -51,8 +51,8 @@ overlaps(placed_box(W1, H1, D1, X1, Y1, Z1), [placed_box(W2, H2, D2, X2, Y2, Z2)
     Y1_max > Y2, Y2_max > Y1,
     Z1_max > Z2, Z2_max > Z1.
 
-overlaps(Box, [_|Rest]) :-
-    overlaps(Box, Rest).
+overlaps(Box, [_|T]) :-
+    overlaps(Box, T).
 
 
 % ---------------------------------------------------------
@@ -83,16 +83,69 @@ place_box(Container, Box, PlacedBoxes, [placed_box(W, H, D, X, Y, Z)|PlacedBoxes
     between(1, Cd, Z),
 
     can_place_box(Container, placed_box(W, H, D, X, Y, Z), PlacedBoxes),
-
     !.
 
 % ---------------------------------------------------------
-% PARTE N - solução
-% - ordena as caixas pelo volume
-% - ...?
+% PARTE 6 - solução
 % ---------------------------------------------------------
 
+pack_boxes(_, [], Empty, Empty).
+pack_boxes(Container, [Box|RemainingBoxes], CurrentPlaced, FinalPlaced):-
+    place_box(Container, Box, CurrentPlaced, NewPlaced),
+    pack_boxes(Container, RemainingBoxes, NewPlaced, FinalPlaced).
 
-solve(SortedBoxes) :-
+solve :-
+    % puxando dados da entrada
+    container(Cw, Ch, Cd),
     boxes(Boxes),
-    predsort(compare_box_volume, Boxes, SortedBoxes).
+
+    % ordena pelo volume
+    predsort(compare_box_volume, Boxes, SortedBoxes),
+    pack_boxes(container(Cw, Ch, Cd), SortedBoxes, [], PlacedBoxes),
+    display_result(PlacedBoxes).
+
+% ---------------------------------------------------------
+% PARTE 7 - exibição da solução
+% ---------------------------------------------------------
+
+display_boxes([]).
+display_boxes([placed_box(W, H, D, X, Y, Z)|T]):-
+    format('Caixa ~w x ~w x ~w em (~w, ~w, ~w)~n', [W, H, D, X, Y, Z]),
+    display_boxes(T),
+    !.
+
+display_result([]):-
+    write('Nenhuma caixa foi colocada'), nl.
+display_result(Placed):-
+    write('Caixas colocadas:'),nl,
+    display_boxes(Placed),
+    display_minecraft_colored_commands(Placed).
+
+% ---------------------------------------------------------
+% PARTE 8 - comandos para preencher as caixas no minecraft
+% pra melhor visualização da solução
+% ---------------------------------------------------------
+
+wool_colors([orange_wool, magenta_wool, light_blue_wool,
+             yellow_wool, lime_wool, pink_wool, gray_wool,
+             light_gray_wool, cyan_wool, purple_wool, blue_wool,
+             brown_wool, green_wool, red_wool]).
+
+box_color(Index, Color) :- 
+    wool_colors(Colors),
+    Length is Index mod 14,
+    nth0(Length, Colors, Color).
+
+generate_colored_fill_commands(PlacedBoxes) :-
+    findall(_, (nth0(Index, PlacedBoxes, PlacedBox), 
+               box_color(Index, Color),
+               print_colored_fill_command(PlacedBox, Color)), _).
+
+print_colored_fill_command(placed_box(W, H, D, X, Y, Z), Color) :-
+    X2 is X + W - 1,
+    Y2 is Y + H - 1,
+    Z2 is Z + D - 1,
+    format('/fill ~w ~w -~w ~w ~w -~w ~w~n', [X, Y, Z, X2, Y2, Z2, Color]).
+
+display_minecraft_colored_commands(PlacedBoxes) :-
+    generate_colored_fill_commands(PlacedBoxes).
