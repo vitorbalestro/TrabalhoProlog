@@ -37,6 +37,25 @@ reverse_order('=', '=').
 % ---------------------------------------------------------
 
 
+overlaps(_, []) :-
+    false.
+
+overlaps(placed_box(W1, H1, D1, X1, Y1, Z1), [placed_box(W2, H2, D2, X2, Y2, Z2)|_]) :-
+    X1_max is X1 + W1,
+    Y1_max is Y1 + H1,
+    Z1_max is Z1 + D1,
+    X2_max is X2 + W2,
+    Y2_max is Y2 + H2,
+    Z2_max is Z2 + D2,
+    X1_max > X2, X2_max > X1,
+    Y1_max > Y2, Y2_max > Y1,
+    Z1_max > Z2, Z2_max > Z1.
+
+overlaps(Box, [_|Rest]) :-
+    overlaps(Box, Rest).
+
+
+
 
 % ---------------------------------------------------------
 % PARTE N - solução
