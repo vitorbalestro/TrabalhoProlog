@@ -33,7 +33,7 @@ reverse_order('=', '=').
 
 
 % ---------------------------------------------------------
-% PARTE 3 - critérios de aceite de uma caixa
+% PARTE 3 - verificação de overlap com caixas no container
 % ---------------------------------------------------------
 
 
@@ -55,7 +55,36 @@ overlaps(Box, [_|Rest]) :-
     overlaps(Box, Rest).
 
 
+% ---------------------------------------------------------
+% PARTE 4 - verificação se pode colocar uma caixa no container
+% ---------------------------------------------------------
 
+can_place_box(container(Cw, Ch, Cd), placed_box(W, H, D, X, Y, Z), PlacedBoxes):-
+    X > 0,
+    Y > 0,
+    Z > 0,
+    X + W - 1 =< Cw,
+    Y + H - 1 =< Ch,
+    Z + D - 1 =< Cd,
+    \+ overlaps(placed_box(W, H, D, X, Y, Z), PlacedBoxes).
+
+% ---------------------------------------------------------
+% PARTE 5 - coloca caixa em alguma posição
+% ---------------------------------------------------------
+
+
+place_box(Container, Box, PlacedBoxes, [placed_box(W, H, D, X, Y, Z)|PlacedBoxes]):-
+    Container = container(Cw, Ch, Cd),
+    Box = box(W, H, D),
+    
+    % Gera uma posição potencial (X, Y, Z)
+    between(1, Cw, X),
+    between(1, Ch, Y),
+    between(1, Cd, Z),
+
+    can_place_box(Container, placed_box(W, H, D, X, Y, Z), PlacedBoxes),
+
+    !.
 
 % ---------------------------------------------------------
 % PARTE N - solução
