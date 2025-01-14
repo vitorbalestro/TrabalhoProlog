@@ -1,3 +1,7 @@
+% ---------------------------------------------------------
+% PARTE 1 - entrada do problema
+% ---------------------------------------------------------
+
 % container(Width, Height, Depth)
 container(10, 10, 10).
 
@@ -8,6 +12,11 @@ boxes([
     box(1, 1, 1),
     box(3, 3, 3)
 ]).
+
+% ---------------------------------------------------------
+% PARTE 2 - ordenação por volume
+% ---------------------------------------------------------
+
 
 % Predicado usado pelo predsort para comparar volumes.
 compare_box_volume(Order, box(W1, H1, D1), box(W2, H2, D2)) :-
@@ -22,6 +31,20 @@ reverse_order('<', '>').
 reverse_order('>', '<').
 reverse_order('=', '=').
 
-solve(SortedBoxes):-
+
+% ---------------------------------------------------------
+% PARTE 3 - critérios de aceite de uma caixa
+% ---------------------------------------------------------
+
+
+
+% ---------------------------------------------------------
+% PARTE N - solução
+% - ordena as caixas pelo volume
+% - ...?
+% ---------------------------------------------------------
+
+
+solve(SortedBoxes) :-
     boxes(Boxes),
     predsort(compare_box_volume, Boxes, SortedBoxes).
