@@ -5,12 +5,12 @@
 % container(Width, Height, Depth)
 container(10, 10, 10).
 
-% Cada box segue o mesmo formato do
-% container: (Width, Height, Depth).
+% Cada box segue o formato
+% (Id, Width, Height, Depth).
 boxes([
-    box(2, 3, 5),
-    box(1, 2, 4),
-    box(3, 4, 5)
+    box(1, 2, 3, 5),
+    box(2, 1, 2, 4),
+    box(3, 3, 4, 5)
 ]).
 
 % ---------------------------------------------------------
@@ -18,7 +18,7 @@ boxes([
 % ---------------------------------------------------------
 
 % Predicado usado pelo predsort para comparar volumes.
-compare_box_volume(Order, box(W1, H1, D1), box(W2, H2, D2)) :-
+compare_box_volume(Order, box(_, W1, H1, D1), box(_, W2, H2, D2)) :-
     Volume1 is W1 * H1 * D1,
     Volume2 is W2 * H2 * D2,
     compare(RevOrder, Volume1, Volume2),
@@ -37,7 +37,7 @@ reverse_order('=', '<'). % fazemos isso para não retornar = nunca, pois o preds
 overlaps(_, []) :- 
     false.
 
-overlaps(placed_box(W1, H1, D1, X1, Y1, Z1), [placed_box(W2, H2, D2, X2, Y2, Z2)|_]) :-
+overlaps(placed_box(_, W1, H1, D1, X1, Y1, Z1), [placed_box(_, W2, H2, D2, X2, Y2, Z2)|_]) :-
     X1_max is X1 + W1,
     Y1_max is Y1 + H1,
     Z1_max is Z1 + D1,
@@ -55,39 +55,39 @@ overlaps(Box, [_|T]) :-
 % PARTE 4 - verificação se pode colocar uma caixa no container
 % ---------------------------------------------------------
 
-can_place_box(container(Cw, Ch, Cd), placed_box(W, H, D, X, Y, Z), PlacedBoxes) :-
+can_place_box(container(Cw, Ch, Cd), placed_box(_, W, H, D, X, Y, Z), PlacedBoxes) :-
     X > 0,
     Y > 0,
     Z > 0,
     X + W - 1 =< Cw,
     Y + H - 1 =< Ch,
     Z + D - 1 =< Cd,
-    \+ overlaps(placed_box(W, H, D, X, Y, Z), PlacedBoxes).
+    \+ overlaps(placed_box(_, W, H, D, X, Y, Z), PlacedBoxes).
 
 % ---------------------------------------------------------
 % PARTE 5 - gera as rotações possíveis de uma caixa
 % ---------------------------------------------------------
 
 % Gera as 6 rotações possíveis para uma caixa (W, H, D)
-rotations(box(W, H, D), [box(W, H, D), box(W, D, H), box(H, W, D), box(H, D, W), box(D, W, H), box(D, H, W)]).
+rotations(box(Id, W, H, D), [box(Id, W, H, D), box(Id, W, D, H), box(Id, H, W, D), box(Id, H, D, W), box(Id, D, W, H), box(Id, D, H, W)]).
 
 % ---------------------------------------------------------
 % PARTE 6 - coloca caixa em alguma posição
 % ---------------------------------------------------------
 
-place_box(Container, Box, PlacedBoxes, [placed_box(W, H, D, X, Y, Z)|PlacedBoxes]) :-
+place_box(Container, Box, PlacedBoxes, [placed_box(Id, W, H, D, X, Y, Z)|PlacedBoxes]) :-
     Container = container(Cw, Ch, Cd),
     
     % Gera as rotações possíveis da caixa
     rotations(Box, Rotations),
-    member(box(W, H, D), Rotations),
+    member(box(Id, W, H, D), Rotations),
     
     % Gera uma posição potencial (X, Y, Z)
     between(1, Cw, X),
     between(1, Ch, Y),
     between(1, Cd, Z),
 
-    can_place_box(Container, placed_box(W, H, D, X, Y, Z), PlacedBoxes),
+    can_place_box(Container, placed_box(Id, W, H, D, X, Y, Z), PlacedBoxes),
     !.
 
 % ---------------------------------------------------------
@@ -129,15 +129,17 @@ best_solution(Solutions, BestSolution) :-
 % ---------------------------------------------------------
 
 display_boxes([]).
-display_boxes([placed_box(W, H, D, X, Y, Z)|T]):-
-    format('Caixa ~w x ~w x ~w em (~w, ~w, ~w)~n', [W, H, D, X, Y, Z]),
+display_boxes([placed_box(Id, W, H, D, X, Y, Z)|T]):-
+    format('Caixa com id ~w de ~w x ~w x ~w em (~w, ~w, ~w)~n', [Id, W, H, D, X, Y, Z]),
     display_boxes(T).
 
 display_result([]):-
     write('Nenhuma caixa foi colocada'), nl.
 display_result(Placed):-
     write('Caixas colocadas:'),nl,
-    display_boxes(Placed).
+    display_boxes(Placed),
+    nl,
+    display_minecraft_colored_commands(Placed).
 
 % ---------------------------------------------------------
 % PARTE 9 - comandos para preencher as caixas no minecraft
@@ -159,7 +161,7 @@ generate_colored_fill_commands(PlacedBoxes) :-
                box_color(Index, Color),
                print_colored_fill_command(PlacedBox, Color)), _).
 
-print_colored_fill_command(placed_box(W, H, D, X, Y, Z), Color) :-
+print_colored_fill_command(placed_box(_, W, H, D, X, Y, Z), Color) :-
     X2 is X + W - 1,
     Y2 is Y + H - 1,
     Z2 is Z + D - 1,
