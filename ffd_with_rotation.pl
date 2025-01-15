@@ -137,7 +137,9 @@ display_result([]):-
     write('Nenhuma caixa foi colocada'), nl.
 display_result(Placed):-
     write('Caixas colocadas:'),nl,
-    display_boxes(Placed).
+    display_boxes(Placed),
+    nl,
+    display_minecraft_colored_commands(Placed).
 
 % ---------------------------------------------------------
 % PARTE 9 - comandos para preencher as caixas no minecraft
