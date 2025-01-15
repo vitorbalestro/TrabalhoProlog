@@ -1,0 +1,90 @@
+\documentclass[12pt]{article}
+
+\usepackage{sbc-template}
+\usepackage{graphicx,url}
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{fancyvrb}
+\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue]{hyperref}
+     
+\sloppy
+
+\title{Implementação de heurísticas em \emph{Prolog} para o problema do contâiner}
+
+\author{Bruno Barros Mello\inst{1} \\ Juliana Moura\inst{1} \\  Vitor
+  Balestro\inst{1,2} }
+
+
+\address{Instituto de Computação -- Universidade Federal Fluminense
+  (UFF)\\
+  Niterói -- RJ -- Brasil
+\nextinstitute
+  Instituto de Matemática e Estatística -- Universidade Federal Fluminense (UFF)\\
+  Niterói -- RJ -- Brasil\\
+%\nextinstitute
+  %Departamento de Sistemas e Computação\\
+  %Universidade Regional de Blumenal (FURB) -- Blumenau, SC -- Brazil
+  \email{brunobarrosmello@id.uff.br, juliana$\_$moura@id.uff.br, vitorbalestro@id.uff.br}
+}
+
+\begin{document} 
+
+\maketitle
+
+\begin{abstract} O problema do contâiner busca a melhor configuração de um conjunto de caixas em um contâiner. Este trabalho é dedicado a implementar soluções heurísticas em \emph{Prolog} para este problema.
+  
+\end{abstract}
+
+
+\section{Introdução}
+
+Neste trabalho, discutimos algumas implementações de heurísticas na linguagem \emph{Prolog} para resolver o \emph{problema do contâiner}. O enunciado do problema é o seguinte: dados um contâiner e um conjunto de caixas com dimensões especificadas (C x L x A), determinar a configuração de caixas no contâiner que maximize a quantidade de caixas empacotadas ou que minimize o volume restante no contâiner. Em nossas abordagens, adotamos o primeiro critério.
+
+Nossa primeira estratégia é um algoritmo guloso simples que não envolve ordenamento das caixas e usa uma regra simples para estabelecer o espaço disponível no contâiner. Entretanto, esta regra é excessivamente simples, e não considera realmente a geometria tri-dimensional do problema. Esta heurística deve ser entendida com fins didáticos.
+
+A segunda estratégia é um algoritmo de \emph{First Fit Decreasing}, sem rotação. Esta heurística ordena as caixas em ordem decrescente de volume e percorre a lista de caixas verificando todas as posições possíveis em que a caixa atual pode ser encaixada no contâiner (a partir de verificações de sobreposição com as outras caixas já empacotadas). Ao final, a melhor solução é selecionada (o critério usado é o número de caixas empacotadas).
+
+Todos os códigos implementados podem ser encontrados no repositório do trabalho: \url{https://github.com/vitorbalestro/TrabalhoProlog}.
+
+\section{Algoritmo guloso simples}
+
+Neste algoritmo, as caixas devem ser consideradas em uma lista não-ordenada. As caixas são construídas como predicados da forma
+\begin{verbatim} caixa(ID, C, L, A),
+\end{verbatim}
+e a lista é obtida através do método \emph{findall}. O contâiner é declarado pelo predicado
+\begin{verbatim} container(C, L, A).
+\end{verbatim}
+
+O estado inicial do problema é a declaração do contâiner e das caixas. O algoritmo constrói a lista de caixas e percorre esta lista verificando se cada caixa pode ser incluída no contâiner. A regra para isto é simples: o algoritmo guarda a soma das dimensões de todas as caixas anteriormente adicionadas, e compara as dimensões da caixa atual com os valores ``restantes" no contâiner. Se a caixa atual não puder ser inserida segundo este critério, esta caixa é ignorada e a próxima caixa da lista é lida. 
+
+Note que esta estratégia pode ser muito ineficiente. Se uma das dimensões for ``completada", então o algoritmo não aceitará nenhuma caixa adicional, ainda que sobre muito espaço no contâiner. Além disso, esta implementação não considera rotações das caixas. 
+
+O estado final do algoritmo é a lista das caixas que foram incluídas no contâiner. No repositório do trabalho, este algoritmo está no arquivo greedy.pl. 
+
+\section{\emph{First Fit Decreasing}}
+
+Neste algoritmo, cada caixa é declarada como um predicado do tipo
+\begin{verbatim} box(W, H, D),
+\end{verbatim}
+e o contâiner é declarado pelo predicado
+\begin{verbatim} container(W, H, D).
+\end{verbatim}
+As caixas declaradas em uma lista, pelo predicado
+\begin{verbatim} boxes([box(W1, H1, D1), box(W2, H2, D2), ...]
+\end{verbatim}
+que, posteriormente, é ordenada por volumes decrescentes. O objetivo é dar prioridade às caixas maiores, que são mais difíceis de empacotar nos espaços restantes. 
+
+A lista ordenada de caixas é percorrida, e a cada etapa o algoritmo tenta encontrar uma posição para a caixa atual usando o método \emph{between}. Cada posição potencial é testada para sobreposição com as caixas que já estão alocadas no contâiner. 
+
+Todas as soluções possíveis são armazenadas e, ao final, o algoritmo elege a melhor solução. O critério para isto é a quantidade de caixas empacotadas. Desta forma, o estado final é uma lista de caixas junto com suas posições de empacotamento (isto é, as coordenadas dos respectivos cantos inferiores).
+ 
+Esta heurística também não considera as possíveis rotações das caixas. Isto é, cada caixa só pode ser empacotada em sua posição declarada. No respositório do trabalho, este algoritmo encontra-se no arquivo ffd.pl. 
+
+
+\section{FFD com rotações}
+
+Este algoritmo é idêntico ao anterior, exceto por ele considerar rotações das caixas. Assim, o algoritmo verifica as posições em que cada rotação de cada caixa pode ser empacotada. O código desta implementação encontra-se no arquivo ffd$\_$with$\_$rotation.pl.
+
+\end{document}
