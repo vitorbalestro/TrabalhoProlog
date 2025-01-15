@@ -29,7 +29,7 @@ compare_box_volume(Order, box(W1, H1, D1), box(W2, H2, D2)) :-
 % para ordenar de forma decrescente pelo volume.
 reverse_order('<', '>').
 reverse_order('>', '<').
-reverse_order('=', '=').
+reverse_order('=', '<'). % fazemos isso para não retornar = nunca, pois o predsort remove itens duplicados
 
 
 % ---------------------------------------------------------
@@ -89,8 +89,12 @@ place_box(Container, Box, PlacedBoxes, [placed_box(W, H, D, X, Y, Z)|PlacedBoxes
 % PARTE 6 - solução
 % ---------------------------------------------------------
 
-pack_boxes(_, [], Empty, Empty).
-pack_boxes(Container, [Box|RemainingBoxes], CurrentPlaced, FinalPlaced):-
+pack_boxes(_, [], PlacedBoxes, PlacedBoxes).
+
+pack_boxes(Container, [_|RemainingBoxes], CurrentPlaced, FinalPlaced) :-
+    pack_boxes(Container, RemainingBoxes, CurrentPlaced, FinalPlaced).
+
+pack_boxes(Container, [Box|RemainingBoxes], CurrentPlaced, FinalPlaced) :-
     place_box(Container, Box, CurrentPlaced, NewPlaced),
     pack_boxes(Container, RemainingBoxes, NewPlaced, FinalPlaced).
 
@@ -101,8 +105,19 @@ solve :-
 
     % ordena pelo volume
     predsort(compare_box_volume, Boxes, SortedBoxes),
-    pack_boxes(container(Cw, Ch, Cd), SortedBoxes, [], PlacedBoxes),
-    display_result(PlacedBoxes).
+
+    findall(PlacedBoxes, pack_boxes(container(Cw, Ch, Cd), SortedBoxes, [], PlacedBoxes), AllSolutions),
+
+    best_solution(AllSolutions, BestSolution),
+
+    display_result(BestSolution),
+    !.
+
+best_solution(Solutions, BestSolution) :-
+    maplist(length, Solutions, Lengths),
+    max_list(Lengths, MaxLength),
+    nth0(Index, Lengths, MaxLength),
+    nth0(Index, Solutions, BestSolution).
 
 % ---------------------------------------------------------
 % PARTE 7 - exibição da solução
@@ -111,15 +126,14 @@ solve :-
 display_boxes([]).
 display_boxes([placed_box(W, H, D, X, Y, Z)|T]):-
     format('Caixa ~w x ~w x ~w em (~w, ~w, ~w)~n', [W, H, D, X, Y, Z]),
-    display_boxes(T),
-    !.
+    display_boxes(T).
 
 display_result([]):-
     write('Nenhuma caixa foi colocada'), nl.
 display_result(Placed):-
     write('Caixas colocadas:'),nl,
-    display_boxes(Placed),
-    display_minecraft_colored_commands(Placed).
+    display_boxes(Placed).
+    % display_minecraft_colored_commands(Placed).
 
 % ---------------------------------------------------------
 % PARTE 8 - comandos para preencher as caixas no minecraft
