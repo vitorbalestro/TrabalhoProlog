@@ -29,12 +29,12 @@
   \email{brunobarrosmello@id.uff.br, juliana$\_$moura@id.uff.br, vitorbalestro@id.uff.br}
 }
 
-\begin{document} 
+\begin{document}
 
 \maketitle
 
 \begin{abstract} O problema do contâiner busca a melhor configuração de um conjunto de caixas em um contâiner. Este trabalho é dedicado a implementar soluções heurísticas em \emph{Prolog} para este problema.
-  
+
 \end{abstract}
 
 
@@ -57,11 +57,11 @@ e a lista é obtida através do método \emph{findall}. O contâiner é declarad
 \begin{verbatim} container(C, L, A).
 \end{verbatim}
 
-O estado inicial do problema é a declaração do contâiner e das caixas. O algoritmo constrói a lista de caixas e percorre esta lista verificando se cada caixa pode ser incluída no contâiner. A regra para isto é simples: o algoritmo guarda a soma das dimensões de todas as caixas anteriormente adicionadas, e compara as dimensões da caixa atual com os valores ``restantes" no contâiner. Se a caixa atual não puder ser inserida segundo este critério, esta caixa é ignorada e a próxima caixa da lista é lida. 
+O estado inicial do problema é a declaração do contâiner e das caixas. O algoritmo constrói a lista de caixas e percorre esta lista verificando se cada caixa pode ser incluída no contâiner. A regra para isto é simples: o algoritmo guarda a soma das dimensões de todas as caixas anteriormente adicionadas, e compara as dimensões da caixa atual com os valores ``restantes" no contâiner. Se a caixa atual não puder ser inserida segundo este critério, esta caixa é ignorada e a próxima caixa da lista é lida.
 
-Note que esta estratégia pode ser muito ineficiente. Se uma das dimensões for ``completada", então o algoritmo não aceitará nenhuma caixa adicional, ainda que sobre muito espaço no contâiner. Além disso, esta implementação não considera rotações das caixas. 
+Note que esta estratégia pode ser muito ineficiente. Se uma das dimensões for ``completada", então o algoritmo não aceitará nenhuma caixa adicional, ainda que sobre muito espaço no contâiner. Além disso, esta implementação não considera rotações das caixas.
 
-O estado final do algoritmo é a lista das caixas que foram incluídas no contâiner. No repositório do trabalho, este algoritmo está no arquivo greedy.pl. 
+O estado final do algoritmo é a lista das caixas que foram incluídas no contâiner. No repositório do trabalho, este algoritmo está no arquivo greedy.pl.
 
 \section{\emph{First Fit Decreasing}}
 
@@ -74,17 +74,23 @@ e o contâiner é declarado pelo predicado
 As caixas declaradas em uma lista, pelo predicado
 \begin{verbatim} boxes([box(W1, H1, D1), box(W2, H2, D2), ...]
 \end{verbatim}
-que, posteriormente, é ordenada por volumes decrescentes. O objetivo é dar prioridade às caixas maiores, que são mais difíceis de empacotar nos espaços restantes. 
+que, posteriormente, é ordenada por volumes decrescentes. O objetivo é dar prioridade às caixas maiores, que são mais difíceis de empacotar nos espaços restantes.
 
-A lista ordenada de caixas é percorrida, e a cada etapa o algoritmo tenta encontrar uma posição para a caixa atual usando o método \emph{between}. Cada posição potencial é testada para sobreposição com as caixas que já estão alocadas no contâiner. 
+A lista ordenada de caixas é percorrida, e a cada etapa o algoritmo tenta encontrar uma posição para a caixa atual usando o método \emph{between}. Cada posição potencial é testada para sobreposição com as caixas que já estão alocadas no contâiner.
 
 Todas as soluções possíveis são armazenadas e, ao final, o algoritmo elege a melhor solução. O critério para isto é a quantidade de caixas empacotadas. Desta forma, o estado final é uma lista de caixas junto com suas posições de empacotamento (isto é, as coordenadas dos respectivos cantos inferiores).
- 
-Esta heurística também não considera as possíveis rotações das caixas. Isto é, cada caixa só pode ser empacotada em sua posição declarada. No respositório do trabalho, este algoritmo encontra-se no arquivo ffd.pl. 
+
+Esta heurística também não considera as possíveis rotações das caixas. Isto é, cada caixa só pode ser empacotada em sua posição declarada. No respositório do trabalho, este algoritmo encontra-se no arquivo ffd.pl.
 
 
 \section{FFD com rotações}
 
 Este algoritmo é idêntico ao anterior, exceto por ele considerar rotações das caixas. Assim, o algoritmo verifica as posições em que cada rotação de cada caixa pode ser empacotada. O código desta implementação encontra-se no arquivo ffd$\_$with$\_$rotation.pl.
+
+\section{Extra: visualização da solução com Minecraft}
+
+Uma dificuldade que o grupo teve com este trabalho foi conseguir visualizar facilmente a solução gerada pelos algoritmos, para validar que está correta. Para isso, uma vez que a solução foi gerada adicionamos uma seção de impressão de comandos \textit{fill} do jogo Minecraft para conseguir preencher uma região com blocos de diferentes cores de acordo com a solução gerada pelo algoritmo. Uma demonstração desta visualização pode ser encontrada \href{https://www.youtube.com/watch?v=qInZZb9y1dQ}{aqui}.
+
+Esta visualização foi utilizada em todos os métodos, mas para não poluir os arquivos de solução com código repetido de coisas extras, manteremos o código desta parte apenas no arquivo \textit{ffd$\_$with$\_$rotation.pl}.
 
 \end{document}
