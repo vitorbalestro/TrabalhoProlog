@@ -1,11 +1,43 @@
-% Dimensões do container
-container(10, 10, 10).
+% ---------------------------------------------------------
+% PARTE 1 - entrada do problema
+% ---------------------------------------------------------
 
-% Lista de caixas (ID, largura, altura, profundidade)
-caixa(1, 5, 5, 5).
-caixa(2, 4, 4, 4).
-caixa(3, 3, 3, 3).
-caixa(4, 2, 2, 2).
+% container(Width, Height, Depth)
+container(20, 20, 20).
+
+% Cada caixa segue o formato
+% (Id, Width, Height, Depth).
+    caixa(1, 5, 5, 5).
+    caixa(2, 10, 8, 6).
+    caixa(3, 8, 7, 4).
+    caixa(4, 12, 10, 8).
+    caixa(5, 15, 12, 10).
+    caixa(6, 7, 6, 5).
+    caixa(7, 6, 6, 6).
+    caixa(8, 9, 7, 5).
+    caixa(9, 10, 10, 10).
+    caixa(10, 12, 8, 8).
+    caixa(11, 5, 5, 4).
+    caixa(12, 6, 8, 6).
+    caixa(13, 7, 5, 5).
+    caixa(14, 8, 8, 6).
+    caixa(15, 9, 10, 9).
+    caixa(16, 14, 12, 10).
+    caixa(17, 11, 9, 8).
+    caixa(18, 13, 11, 9).
+    caixa(19, 10, 9, 8).
+    caixa(20, 6, 5, 5).
+    caixa(21, 8, 7, 7).
+    caixa(22, 9, 8, 8).
+    caixa(23, 15, 14, 12).
+    caixa(24, 16, 12, 10).
+    caixa(25, 10, 10, 10).
+    caixa(26, 6, 6, 6).
+    caixa(27, 7, 6, 5).
+    caixa(28, 9, 8, 7).
+    caixa(29, 12, 10, 9).
+    caixa(30, 14, 14, 12).
+
 
 % Empacotar caixas
 empacotar(Resultado) :-

@@ -44,9 +44,11 @@ Neste trabalho, discutimos algumas implementações de heurísticas na linguagem
 
 Nossa primeira estratégia é um algoritmo guloso simples que não envolve ordenamento das caixas e usa uma regra simples para estabelecer o espaço disponível no contâiner. Entretanto, esta regra é excessivamente simples, e não considera realmente a geometria tri-dimensional do problema. Esta heurística deve ser entendida com fins didáticos.
 
-A segunda estratégia é um algoritmo de \emph{First Fit Decreasing}, sem rotação. Esta heurística ordena as caixas em ordem decrescente de volume e percorre a lista de caixas verificando todas as posições possíveis em que a caixa atual pode ser encaixada no contâiner (a partir de verificações de sobreposição com as outras caixas já empacotadas). Ao final, a melhor solução é selecionada (o critério usado é o número de caixas empacotadas).
+A segunda estratégia é um algoritmo de \emph{First Fit Decreasing}, sem rotação. Esta heurística ordena as caixas em ordem decrescente de volume e percorre a lista de caixas verificando todas as posições possíveis em que a caixa atual pode ser encaixada no contâiner (a partir de verificações de sobreposição com as outras caixas já empacotadas). Ao final, a melhor solução é selecionada (o critério usado é o número de caixas empacotadas). Esta heurística é implementada com ou sem considerar possíveis rotações das caixas.
 
-Todos os códigos implementados podem ser encontrados no repositório do trabalho: \url{https://github.com/vitorbalestro/TrabalhoProlog}.
+Além destas duas estratégias, também implementamos um algoritmo de \emph{Largest Area First Fit}. Nesta heurística, as caixas são ordenadas pela maior área da base. Para cada caixa, o algoritmo identifica as posições de encaixe disponíveis e escolhe aquela com a menor altura. Caixas que não podem ser encaixadas são ignoradas. 
+
+Todos os códigos implementados podem ser encontrados no repositório do trabalho: \url{https://github.com/vitorbalestro/TrabalhoProlog}. Uma boa referência para o problema do contâiner é \cite{ngoi}. 
 
 \section{Algoritmo guloso simples}
 
@@ -85,12 +87,35 @@ Esta heurística também não considera as possíveis rotações das caixas. Ist
 
 \section{FFD com rotações}
 
-Este algoritmo é idêntico ao anterior, exceto por ele considerar rotações das caixas. Assim, o algoritmo verifica as posições em que cada rotação de cada caixa pode ser empacotada. O código desta implementação encontra-se no arquivo ffd$\_$with$\_$rotation.pl.
+Este algoritmo é idêntico ao anterior, exceto por ele considerar rotações das caixas. Assim, o algoritmo verifica as posições em que cada rotação de cada caixa pode ser empacotada. O código desta implementação encontra-se no arquivo ffd$\_$with$\_$rotation.pl. No arquivo ffd$\_$with$\_$rotation$\_$2.pl, encontra-se o mesmo código mas com um estado inicial mais complexo.
 
 \section{Extra: visualização da solução com Minecraft}
 
 Uma dificuldade que o grupo teve com este trabalho foi conseguir visualizar facilmente a solução gerada pelos algoritmos, para validar que está correta. Para isso, uma vez que a solução foi gerada adicionamos uma seção de impressão de comandos \textit{fill} do jogo Minecraft para conseguir preencher uma região com blocos de diferentes cores de acordo com a solução gerada pelo algoritmo. Uma demonstração desta visualização pode ser encontrada \href{https://www.youtube.com/watch?v=qInZZb9y1dQ}{aqui}.
 
 Esta visualização foi utilizada em todos os métodos, mas para não poluir os arquivos de solução com código repetido de coisas extras, manteremos o código desta parte apenas no arquivo \textit{ffd$\_$with$\_$rotation.pl}. Note que o sistema de coordenadas do jogo utiliza o eixo Z invertido, então coordenadas $(X, Y, Z)$ viram $(X, Y, -Z)$ no jogo.
+
+
+\section{\emph{Largest Area First Fit}}
+
+O estado inicial do problema é o mesmo da heurística FFD: um contâiner tri-dimensional e uma coleção de caixas tri-dimensionais. Primeiro, as caixas são ordenadas por área da base decrescente. Então, o algoritmo percorre esta lista ordenada tentando empacotar cada caixa. Para isto, o algoritmo testa todas as posições possíveis de empacotamento, e seleciona aquela que tem a menor altura. Esta heurística foi inspirada em \cite{gurbuz}.
+
+\section{Resultados e Discussão}
+
+Executamos o método guloso e o método LAFF para um contâiner de 50 x 50 x 50 e 30 caixas. Conforme esperado, o método guloso teve uma performance muito ruim: apenas 5 caixas foram empacotadas. O método LAFF, por outro lado, conseguiu empacotar todas as caixas (solução ótima, sob nosso ponto de vista de quantidade de caixas empacotadas). Ao reduzir o contâiner para 20 x 20 x 20, o LAFF empacotou 13 caixas, e o algoritmo guloso empacotou apenas 3. O tempo de execução para o método guloso é desprezível. O tempo de execução do método LAFF nos dois testes ficou na ordem de segundos.
+
+O método FFD apresentou menor eficiência do que o método LAFF. A tentativa de execução deste método para 30 caixas resultou em estouro de pilha. Para um estado inicial de 15 caixas em um contâiner de 20 x 20 x 20, o método FFD com rotações empacotou 13 caixas (assim como o LAFF). Entretanto, o tempo de execução está na ordem dos minutos. 
+
+A razão para a menor eficiência do FFD possivelmente estã no fato de que esta heurística considera \textbf{todas} as posições possíveis de empacotamento e, portanto, cria (abstratamente) uma árvore de possíveis empacotamentos cuja quantidade de nós é exponencial no tamanho do container. Depois, o algoritmo seleciona a melhor delas. O método LAFF, por outro lado, considera uma escolha gulosa: dadas as posições possíveis (de cada etapa), apenas uma delas é selecionada segundo um critério (especificamente, a menor altura da posição). 
+
+Em resumo, os testes executados indicam que a heurística LAFF é mais eficiente e não tem perda significativa de qualidade em relação à heurística FFD. 
+
+\begin{thebibliography}{99}
+
+\bibitem{gurbuz} M. G\"{u}rb\"{u}z, S. Akyokus, I. Emiroglu, A. G\"{u}ran: An Efficient Algorithm for 3D Rectangular Box Packing. \emph{Applied Automatic Systems Proceedings of Selected AAS}. Ohrid, 26--29.09.2009. Published by `Society of ETAI of Republic of Macedonia, Skopje, 2009. 
+
+\bibitem{ngoi} B. K. A. Ngoi, M. L. Tay, E. S. Chua: Applying spatial representation techniques to the container packing problem. \emph{Int. J. Prod. Res.} \textbf{32} (1), pp. 111--123, 1994. 
+
+\end{thebibliography}
 
 \end{document}

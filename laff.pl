@@ -3,7 +3,7 @@
 % ---------------------------------------------------------
 
 % container(Width, Height, Depth)
-container(50, 50, 50).
+container(20, 20, 20).
 
 % Cada box segue o formato
 % (Id, Width, Height, Depth).
