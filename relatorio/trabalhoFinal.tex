@@ -101,19 +101,19 @@ Esta visualização foi utilizada em todos os métodos para fins de \textit{debu
 
 \section{Resultados e Discussão}
 
-Executamos os métodos para um contâiner de 50x50x50 com 30 caixas, e também para um container 20x20x20 com 15 caixas. Estes foram os resultados e seus tempos de execução.
+Executamos os métodos para um contâiner de 50x50x50 com 30 caixas, e também para um container 20x20x20 com 15 caixas. Os resultados para estes dois experimentos encontram-se nas tabela a seguir.
 
 \begin{table}[H]
 	\centering
-	\caption{Resultados de execução para cada método}
+	\caption{container 50x50x50 com 30 caixas}
 	\begin{tabular}{lcc}
 		\toprule
 		\textbf{Método}        & \textbf{Caixas Empacotadas} & \textbf{Tempo de Execução}     \\
 		\midrule
-		Força Bruta            & N/A                         & Estoura o tempo limite de 30 s \\
-		First Fit Decreasing   & 13                          & 0.234 s                        \\
-		FFD com Rotações       & 12                          & 0.869 s                        \\
-		Largest Area First Fit & 12                          & 0.832 s                        \\
+		Força Bruta            & N/A                         & Estouro de Stack Limit (1.0Gb) \\
+		First Fit Decreasing   & 30                          & 0.338 s                        \\
+		FFD com Rotações       & 30                          & 0.160 s                        \\
+		Largest Area First Fit & 30                          & 21.911 s                       \\
 		\bottomrule
 	\end{tabular}
 	\label{tab:resultados_50}

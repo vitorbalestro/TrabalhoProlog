@@ -70,5 +70,5 @@ solve :-
     solution_size(PackedBoxes, ExecutionSize),
     format('Execution size: ~d', [ExecutionSize]), nl,
 
-    % write_result(PackedBoxes),
+    write_result(PackedBoxes),
     !.
