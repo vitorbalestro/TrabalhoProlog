@@ -93,6 +93,10 @@ Este algoritmo é bem semelhante ao anterior, exceto pelo fato de também consid
 
 O estado inicial do problema é o mesmo da heurística FFD: um contâiner tri-dimensional e uma coleção de caixas tri-dimensionais. Primeiro, as caixas são ordenadas por área da base decrescente. Então, o algoritmo percorre esta lista ordenada tentando empacotar cada caixa. Para isto, o algoritmo testa todas as posições possíveis de empacotamento, e seleciona aquela que tem a menor altura. Esta heurística foi inspirada em \cite{gurbuz}.
 
+\section{Custo ou avaliação}
+
+Todas as três heurísticas utilizadas são heurísticas de custo (passado). Elas elas avaliam o custo imediato ou passado de se tomar uma determinada decisão de empacotamento no contexto atual do problema. Elas escolhem uma solução ótima localmente sem necessariamente considerar o custo acumulado de toda a solução, como fariam as heurísticas de avaliação.
+
 \section{Extra: visualização da solução com Minecraft}
 
 Uma dificuldade que o grupo teve com este trabalho foi conseguir visualizar facilmente a solução gerada pelos algoritmos, para validar que está correta. Para isso, uma vez que a solução foi gerada adicionamos uma seção de impressão de comandos \textit{fill} do jogo Minecraft para conseguir preencher uma região com blocos de diferentes cores de acordo com a solução gerada pelo algoritmo. Uma demonstração desta visualização pode ser encontrada \href{https://www.youtube.com/watch?v=qInZZb9y1dQ}{aqui}.
