@@ -29,15 +29,8 @@ custo_total(Alocadas, Custo) :-
     custo(Alocadas, Custo).
 
 % ---------------------------------------------------------
-% PARTE 3 - Valida Alocação
-% alocada(Id, X, Y, Z, W, H, D) onde X, Y, Z sao as coordenadas e W, H, D sao as dimenções da caixa Id.
-% Verifica se a caixa cabe no container ou se ela se sobrepõe a alguma caixa já alocada.
+% PARTE 3 - Encontrar posição válida dentro do container
 % ---------------------------------------------------------
-
-cabe(caixa(_, W, H, D), container(ContainerW, ContainerH, ContainerD)) :-
-    W =< ContainerW, 
-    H =< ContainerH, 
-    D =< ContainerD.
 
 sobrepoe(_, []) :- false.
 sobrepoe(alocada(_, X, Y, Z, W, H, D), [alocada(_, X2, Y2, Z2, W2, H2, D2) | _]) :-
@@ -47,6 +40,31 @@ sobrepoe(alocada(_, X, Y, Z, W, H, D), [alocada(_, X2, Y2, Z2, W2, H2, D2) | _])
 sobrepoe(NovaCaixa, [_ | Restante]) :-
     sobrepoe(NovaCaixa, Restante).
 
-pode_alocar(Caixa, Alocadas, Container) :-
-    cabe(Caixa, Container),
-    \+ sobrepoe(Caixa, Alocadas).
+posicao_valida(W, H, D, Alocadas, container(ContainerW, ContainerH, ContainerD), X, Y, Z) :-
+    between(0, ContainerW, X),
+    between(0, ContainerH, Y),
+    between(0, ContainerD, Z),
+    X + W =< ContainerW,
+    Y + H =< ContainerH,
+    Z + D =< ContainerD,
+    \+ sobrepoe(alocada(_, X, Y, Z, W, H, D), Alocadas).
+
+% ---------------------------------------------------------
+% PARTE 4 - Inicializa lista com cada caixa alocada em posição válida
+% ---------------------------------------------------------
+
+inicializa_lista_caixas(Caixas, Container, ListaInicial) :-
+    findall([Custo, [alocada(Id, X, Y, Z, W, H, D)]],
+        (
+            member(caixa(Id, W, H, D), Caixas),
+            posicao_valida(W, H, D, [], Container, X, Y, Z),
+            volume(W, H, D, Custo)
+        ),
+        ListaInicial).
+
+% ---------------------------------------------------------
+% PARTE 5 - Ordena lista pelo custo
+% ---------------------------------------------------------
+
+ordena(Lista, ListaOrdenada) :-
+    sort(1, @=<, Lista, ListaOrdenada).
