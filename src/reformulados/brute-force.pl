@@ -1,4 +1,5 @@
 :- ensure_loaded('./utils/input.pl').
+:- ensure_loaded('./utils/write_result.pl').
 
 % Overlaps checa se uma caixa conflita com as caixas já inseridas no container
 overlaps(_, []) :-
