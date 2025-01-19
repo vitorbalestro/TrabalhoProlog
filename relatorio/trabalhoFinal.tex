@@ -119,6 +119,22 @@ Executamos os métodos para um contâiner de 50x50x50 com 30 caixas, e também p
 	\label{tab:resultados_50}
 \end{table}
 
+\begin{table}[H]
+	\centering
+	\caption{container 20x20x20 com 15 caixas}
+	\begin{tabular}{lcc}
+		\toprule
+		\textbf{Método}        & \textbf{Caixas Empacotadas} & \textbf{Tempo de Execução}     \\
+		\midrule
+		Força Bruta            & N/A                         & Estouro de Stack Limit (1.0Gb) \\
+		First Fit Decreasing   & 10                          & 0.121 s                        \\
+		FFD com Rotações       & 10                          & 0.367 s                        \\
+		Largest Area First Fit & 10                          & 0.425 s                        \\
+		\bottomrule
+	\end{tabular}
+	\label{tab:resultados_20}
+\end{table}
+
 \begin{thebibliography}{99}
 
 	\bibitem{gurbuz} M. G\"{u}rb\"{u}z, S. Akyokus, I. Emiroglu, A. G\"{u}ran: An Efficient Algorithm for 3D Rectangular Box Packing. \emph{Applied Automatic Systems Proceedings of Selected AAS}. Ohrid, 26--29.09.2009. Published by `Society of ETAI of Republic of Macedonia, Skopje, 2009.
