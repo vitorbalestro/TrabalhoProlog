@@ -135,6 +135,16 @@ Executamos os métodos para um contâiner de 50x50x50 com 30 caixas, e também p
 	\label{tab:resultados_20}
 \end{table}
 
+Com base nos resultados dos experimentos descritos nas tabelas acima, podemos chegar às seguintes conclusões:
+
+O método de força bruta revelou-se impraticável para este problema, uma vez que não foi possível sua execução devido ao estouro do limite de pilha (1.0Gb). Isso destaca a ineficiência inerente dessa abordagem, especialmente para problemas com espaço de busca vasto devido ao número exponencial de combinações possíveis.
+
+Os algoritmos \emph{First Fit Decreasing} (FFD) e sua variação que considera rotações (\emph{FFD com Rotações}) apresentaram um desempenho similar em termos de quantidade de caixas empacotadas. Ambos conseguiram embalar o número máximo possível de caixas em cada instância do problema. No entanto, o \emph{FFD com Rotações} apresentou tempos de execução melhores em relação ao \emph{FFD} sem rotações à medida que o tamanho da entrada aumentou.
+
+A heurística \emph{Largest Area First Fit} (LAFF), apesar de conseguir alcançar o mesmo número de caixas empacotadas que os algoritmos \emph{FFD}, mostrou-se muito menos eficiente em termos de tempo de execução, especialmente com o aumento do tamanho da entrada.
+
+Em resumo, para o problema do contêiner, as heurísticas baseadas em volume, especialmente quando enriquecidas com a consideração de rotações, como é o caso do \emph{FFD com Rotações}, oferecem um equilíbrio mais satisfatório entre eficiência de tempo e eficácia de empacotamento.
+
 \begin{thebibliography}{99}
 
 	\bibitem{gurbuz} M. G\"{u}rb\"{u}z, S. Akyokus, I. Emiroglu, A. G\"{u}ran: An Efficient Algorithm for 3D Rectangular Box Packing. \emph{Applied Automatic Systems Proceedings of Selected AAS}. Ohrid, 26--29.09.2009. Published by `Society of ETAI of Republic of Macedonia, Skopje, 2009.
