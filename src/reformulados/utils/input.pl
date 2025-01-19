@@ -1,5 +1,5 @@
 % container(Width, Height, Depth)
-container(20, 20, 20).
+container(50,50,50).
 
 % Cada caixa segue o formato
 % (Id, Width, Height, Depth).

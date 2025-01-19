@@ -1,5 +1,6 @@
 :- ensure_loaded('./utils/input.pl').
 :- ensure_loaded('./utils/write_result.pl').
+:- ensure_loaded('./utils/size.pl').
 
 % ---------------------------------------------------------
 % Ordenação por maior área de base
@@ -110,15 +111,17 @@ can_place_box(placed_box(_, W, H, D, X, Y, Z), PlacedBoxes) :-
 % ---------------------------------------------------------
 
 solve :-
-    % Carrega dados das caixas
     findall(box(Id, W, H, D), box(Id, W, H, D), Boxes),
 
-    % Ordena as caixas pela área de base
+    get_time(Start),
     predsort(compare_box_area, Boxes, SortedBoxes),
-
-    % Aplica o algoritmo LAFF
     pack_boxes_laff(SortedBoxes, FinalPlaced),
+    get_time(End),
+    ExecutionTime is End - Start,
 
-    % Exibe os resultados
+    format('Execution time: ~3f seconds', [ExecutionTime]), nl,
+    solution_size(FinalPlaced, ExecutionSize),
+    format('Execution size: ~d', [ExecutionSize]), nl,
+
     write_result(FinalPlaced),
     !.

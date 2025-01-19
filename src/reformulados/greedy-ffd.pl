@@ -1,5 +1,6 @@
 :- ensure_loaded('./utils/input.pl').
 :- ensure_loaded('./utils/write_result.pl').
+:- ensure_loaded('./utils/size.pl').
 
 overlaps(_, []) :-
     false.
@@ -58,7 +59,16 @@ box_position(box(Id, W, H, D), PlacedBoxes, PlacedBox) :-
 
 solve :-
     findall(box(Id, W, H, D), box(Id, W, H, D), Boxes),
+
+    get_time(Start),
     predsort(compare_box_volume, Boxes, SortedBoxes),
     pack(SortedBoxes, [], PackedBoxes),
+    get_time(End),
+    ExecutionTime is End - Start,
+
+    format('Execution time: ~3f seconds', [ExecutionTime]), nl,
+    solution_size(PackedBoxes, ExecutionSize),
+    format('Execution size: ~d', [ExecutionSize]), nl,
+
     write_result(PackedBoxes),
     !.

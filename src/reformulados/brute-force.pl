@@ -1,4 +1,6 @@
 :- ensure_loaded('./utils/input.pl').
+:- ensure_loaded('./utils/write_result.pl').
+:- ensure_loaded('./utils/size.pl').
 
 % Overlaps checa se uma caixa conflita com as caixas já inseridas no container
 overlaps(_, []) :-
@@ -72,12 +74,14 @@ solve:-
     findall(box(Id, W, H, D), box(Id, W, H, D), Boxes),
 
     get_time(Start),
-
     findall(Result, pack(Boxes, Result), AllResults),
     find_best_result(AllResults, BestResult),
-
     get_time(End),
     ExecutionTime is End - Start,
+
     format('Execution time: ~3f seconds', [ExecutionTime]), nl,
+    solution_size(BestResult, ExecutionSize),
+    format('Execution size: ~d', [ExecutionSize]), nl,
 
     write_result(BestResult).
+
