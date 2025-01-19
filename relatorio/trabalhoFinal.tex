@@ -101,13 +101,23 @@ Esta visualização foi utilizada em todos os métodos para fins de \textit{debu
 
 \section{Resultados e Discussão}
 
-Executamos o método guloso e o método LAFF para um contâiner de 50 x 50 x 50 e 30 caixas. Conforme esperado, o método guloso teve uma performance muito ruim: apenas 5 caixas foram empacotadas. O método LAFF, por outro lado, conseguiu empacotar todas as caixas (solução ótima, sob nosso ponto de vista de quantidade de caixas empacotadas). Ao reduzir o contâiner para 20 x 20 x 20, o LAFF empacotou 13 caixas, e o algoritmo guloso empacotou apenas 3. O tempo de execução para o método guloso é desprezível. O tempo de execução do método LAFF nos dois testes ficou na ordem de segundos.
+Executamos os métodos para um contâiner de 50x50x50 com 30 caixas, e também para um container 20x20x20 com 15 caixas. Estes foram os resultados e seus tempos de execução.
 
-O método FFD apresentou menor eficiência do que o método LAFF. A tentativa de execução deste método para 30 caixas resultou em estouro de pilha. Para um estado inicial de 15 caixas em um contâiner de 20 x 20 x 20, o método FFD com rotações empacotou 13 caixas (assim como o LAFF). Entretanto, o tempo de execução está na ordem dos minutos.
-
-A razão para a menor eficiência do FFD possivelmente estã no fato de que esta heurística considera \textbf{todas} as posições possíveis de empacotamento e, portanto, cria (abstratamente) uma árvore de possíveis empacotamentos cuja quantidade de nós é exponencial no tamanho do container. Depois, o algoritmo seleciona a melhor delas. O método LAFF, por outro lado, considera uma escolha gulosa: dadas as posições possíveis (de cada etapa), apenas uma delas é selecionada segundo um critério (especificamente, a menor altura da posição).
-
-Em resumo, os testes executados indicam que a heurística LAFF é mais eficiente e não tem perda significativa de qualidade em relação à heurística FFD.
+\begin{table}[H]
+	\centering
+	\caption{Resultados de execução para cada método}
+	\begin{tabular}{lcc}
+		\toprule
+		\textbf{Método}        & \textbf{Caixas Empacotadas} & \textbf{Tempo de Execução}     \\
+		\midrule
+		Força Bruta            & N/A                         & Estoura o tempo limite de 30 s \\
+		First Fit Decreasing   & 13                          & 0.234 s                        \\
+		FFD com Rotações       & 12                          & 0.869 s                        \\
+		Largest Area First Fit & 12                          & 0.832 s                        \\
+		\bottomrule
+	\end{tabular}
+	\label{tab:resultados_50}
+\end{table}
 
 \begin{thebibliography}{99}
 
