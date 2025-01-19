@@ -46,9 +46,9 @@ Nossa primeira estratégia é um algoritmo guloso simples que não envolve orden
 
 A segunda estratégia é um algoritmo de \emph{First Fit Decreasing}, sem rotação. Esta heurística ordena as caixas em ordem decrescente de volume e percorre a lista de caixas verificando todas as posições possíveis em que a caixa atual pode ser encaixada no contâiner (a partir de verificações de sobreposição com as outras caixas já empacotadas). Ao final, a melhor solução é selecionada (o critério usado é o número de caixas empacotadas). Esta heurística é implementada com ou sem considerar possíveis rotações das caixas.
 
-Além destas duas estratégias, também implementamos um algoritmo de \emph{Largest Area First Fit}. Nesta heurística, as caixas são ordenadas pela maior área da base. Para cada caixa, o algoritmo identifica as posições de encaixe disponíveis e escolhe aquela com a menor altura. Caixas que não podem ser encaixadas são ignoradas. 
+Além destas duas estratégias, também implementamos um algoritmo de \emph{Largest Area First Fit}. Nesta heurística, as caixas são ordenadas pela maior área da base. Para cada caixa, o algoritmo identifica as posições de encaixe disponíveis e escolhe aquela com a menor altura. Caixas que não podem ser encaixadas são ignoradas.
 
-Todos os códigos implementados podem ser encontrados no repositório do trabalho: \url{https://github.com/vitorbalestro/TrabalhoProlog}. Uma boa referência para o problema do contâiner é \cite{ngoi}. 
+Todos os códigos implementados podem ser encontrados no repositório do trabalho: \url{https://github.com/vitorbalestro/TrabalhoProlog}. Uma boa referência para o problema do contâiner é \cite{ngoi}.
 
 \section{Algoritmo guloso simples}
 
@@ -104,17 +104,17 @@ O estado inicial do problema é o mesmo da heurística FFD: um contâiner tri-di
 
 Executamos o método guloso e o método LAFF para um contâiner de 50 x 50 x 50 e 30 caixas. Conforme esperado, o método guloso teve uma performance muito ruim: apenas 5 caixas foram empacotadas. O método LAFF, por outro lado, conseguiu empacotar todas as caixas (solução ótima, sob nosso ponto de vista de quantidade de caixas empacotadas). Ao reduzir o contâiner para 20 x 20 x 20, o LAFF empacotou 13 caixas, e o algoritmo guloso empacotou apenas 3. O tempo de execução para o método guloso é desprezível. O tempo de execução do método LAFF nos dois testes ficou na ordem de segundos.
 
-O método FFD apresentou menor eficiência do que o método LAFF. A tentativa de execução deste método para 30 caixas resultou em estouro de pilha. Para um estado inicial de 15 caixas em um contâiner de 20 x 20 x 20, o método FFD com rotações empacotou 13 caixas (assim como o LAFF). Entretanto, o tempo de execução está na ordem dos minutos. 
+O método FFD apresentou menor eficiência do que o método LAFF. A tentativa de execução deste método para 30 caixas resultou em estouro de pilha. Para um estado inicial de 15 caixas em um contâiner de 20 x 20 x 20, o método FFD com rotações empacotou 13 caixas (assim como o LAFF). Entretanto, o tempo de execução está na ordem dos minutos.
 
-A razão para a menor eficiência do FFD possivelmente estã no fato de que esta heurística considera \textbf{todas} as posições possíveis de empacotamento e, portanto, cria (abstratamente) uma árvore de possíveis empacotamentos cuja quantidade de nós é exponencial no tamanho do container. Depois, o algoritmo seleciona a melhor delas. O método LAFF, por outro lado, considera uma escolha gulosa: dadas as posições possíveis (de cada etapa), apenas uma delas é selecionada segundo um critério (especificamente, a menor altura da posição). 
+A razão para a menor eficiência do FFD possivelmente estã no fato de que esta heurística considera \textbf{todas} as posições possíveis de empacotamento e, portanto, cria (abstratamente) uma árvore de possíveis empacotamentos cuja quantidade de nós é exponencial no tamanho do container. Depois, o algoritmo seleciona a melhor delas. O método LAFF, por outro lado, considera uma escolha gulosa: dadas as posições possíveis (de cada etapa), apenas uma delas é selecionada segundo um critério (especificamente, a menor altura da posição).
 
-Em resumo, os testes executados indicam que a heurística LAFF é mais eficiente e não tem perda significativa de qualidade em relação à heurística FFD. 
+Em resumo, os testes executados indicam que a heurística LAFF é mais eficiente e não tem perda significativa de qualidade em relação à heurística FFD.
 
 \begin{thebibliography}{99}
 
-\bibitem{gurbuz} M. G\"{u}rb\"{u}z, S. Akyokus, I. Emiroglu, A. G\"{u}ran: An Efficient Algorithm for 3D Rectangular Box Packing. \emph{Applied Automatic Systems Proceedings of Selected AAS}. Ohrid, 26--29.09.2009. Published by `Society of ETAI of Republic of Macedonia, Skopje, 2009. 
+	\bibitem{gurbuz} M. G\"{u}rb\"{u}z, S. Akyokus, I. Emiroglu, A. G\"{u}ran: An Efficient Algorithm for 3D Rectangular Box Packing. \emph{Applied Automatic Systems Proceedings of Selected AAS}. Ohrid, 26--29.09.2009. Published by `Society of ETAI of Republic of Macedonia, Skopje, 2009.
 
-\bibitem{ngoi} B. K. A. Ngoi, M. L. Tay, E. S. Chua: Applying spatial representation techniques to the container packing problem. \emph{Int. J. Prod. Res.} \textbf{32} (1), pp. 111--123, 1994. 
+	\bibitem{ngoi} B. K. A. Ngoi, M. L. Tay, E. S. Chua: Applying spatial representation techniques to the container packing problem. \emph{Int. J. Prod. Res.} \textbf{32} (1), pp. 111--123, 1994.
 
 \end{thebibliography}
 
