@@ -2,7 +2,6 @@
 \usepackage[brazil]{babel}
 \usepackage[utf8]{inputenc}
 
-% Título e autores
 \title{Implementação de Heurísticas em \emph{Prolog} para o Problema do Container}
 \author{Bruno Barros Mello, Juliana Moura, Vitor Balestro}
 \institute{Universidade Federal Fluminense (UFF)}
@@ -10,29 +9,61 @@
 
 \begin{document}
 
-% Slide de título
 \begin{frame}
 	\titlepage
 \end{frame}
 
-% Table of contents
 \begin{frame}{Conteúdo}
 	\tableofcontents
 \end{frame}
 
-% Introdução
 \section{Introdução e Apresentação do Problema}
 \begin{frame}{Introdução e Apresentação do Problema}
 	\begin{itemize}
 		\item Objetivo: Maximizar o número de caixas empacotadas em um container.
 		\item Desafios: Configurações de empacotamento em um espaço tri-dimensional.
-		\item Heurísticas abordadas: Força Bruta, FFD, FFD com Rotações, LAFF.
+		\item Força bruta como benchmark inicial.
+		\item Heurísticas abordadas: FFD, FFD com Rotações, LAFF.
 	\end{itemize}
 \end{frame}
 
-% Força Bruta
-\section{Força Bruta}
-\begin{frame}{Força Bruta}
+\section{Modelagem do problema}
+\begin{frame}{Modelagem do problema}
+
+	\textbf{Variáveis de decisão}
+	\begin{itemize}
+		\item \texttt{CAIXA(w,h,d)}: conjunto de caixas de dimensões \emph{width}, \emph{height} e \emph{depth}
+		\item \texttt{Container(w,h,d)}: container de dimensões \emph{width}, \emph{height} e \emph{depth}
+	\end{itemize}
+
+	\vspace{0.5cm}
+	\textbf{Função Objetivo}
+	\begin{itemize}
+		\item Maximizar a quantidade de caixas que cabem em um container
+	\end{itemize}
+
+	\vspace{0.5cm}
+	\textbf{Restrições}
+	\begin{itemize}
+		\item Uma caixa não pode colidir com outras caixas no container
+		\item Uma caixa deve estar completamente dentro do container
+	\end{itemize}
+\end{frame}
+
+\section{Representação em prolog}
+\begin{frame}{Representação em prolog}
+
+	\begin{itemize}
+		\item \textbf{Entrada:} predicados \emph{container} e \emph{box}
+		\item \textbf{Entrypoint:} predicados \emph{container} e \emph{box}
+		\item \textbf{Estado inicial:} empacotamento vazio
+		\item \textbf{Estado final:} empacotamento resultante
+		\item \textbf{Mudança de estado:} empacota uma caixa no container
+	\end{itemize}
+\end{frame}
+
+\section{Benchmark: Força Bruta}
+\begin{frame}{Benchmark: Força Bruta}
 	\begin{itemize}
 		\item Explora todas as combinações possíveis.
 		\item Inviável para grandes instâncias devido ao alto custo computacional.
@@ -40,8 +71,7 @@
 	\end{itemize}
 \end{frame}
 
-% FFD
-\section{First Fit Decreasing}
+\section{Heurística: First Fit Decreasing}
 \begin{frame}{First Fit Decreasing (FFD)}
 	\begin{itemize}
 		\item Ordena caixas por volume decrescente.
@@ -50,8 +80,7 @@
 	\end{itemize}
 \end{frame}
 
-% FFD com Rotações
-\section{FFD com Rotações}
+\section{Heurística: FFD com Rotações}
 \begin{frame}{FFD com Rotações}
 	\begin{itemize}
 		\item Similar ao FFD, mas considera rotações das caixas.
@@ -61,8 +90,7 @@
 	\end{itemize}
 \end{frame}
 
-% LAFF
-\section{Largest Area First Fit (LAFF)}
+\section{Heurística: Largest Area First Fit (LAFF)}
 \begin{frame}{Largest Area First Fit}
 	\begin{itemize}
 		\item Ordena caixas pela área da base.
@@ -72,18 +100,16 @@
 \end{frame}
 
 \begin{frame}{Resultados Obtidos (50x50x50)}
-	\begin{table}[]
+	\begin{table}
 		\centering
-		\resizebox{0.8\linewidth}{!}{%
+
+		\resizebox{0.9\linewidth}{!}{
 			\begin{tabular}{lcc}
-				\toprule
 				\textbf{Método}        & \textbf{Caixas Empacotadas} & \textbf{Tempo de Execução} \\
-				\midrule
 				Força Bruta            & N/A                         & Estouro de Stack Limit     \\
 				First Fit Decreasing   & 30                          & 0.338 s                    \\
 				FFD com Rotações       & 30                          & 0.160 s                    \\
-				Largest Area First Fit & 30                          & 21.911 s                   \\
-				\bottomrule
+				Largest Area First Fit & 30                          & 21.911 s
 			\end{tabular}
 		}
 		\caption{Container 50x50x50 com 30 caixas}
@@ -91,18 +117,16 @@
 \end{frame}
 
 \begin{frame}{Resultados Obtidos (20x20x20)}
-	\begin{table}[]
+	\begin{table}
 		\centering
-		\resizebox{0.8\linewidth}{!}{%
+
+		\resizebox{0.9\linewidth}{!}{
 			\begin{tabular}{lcc}
-				\toprule
 				\textbf{Método}        & \textbf{Caixas Empacotadas} & \textbf{Tempo de Execução} \\
-				\midrule
 				Força Bruta            & N/A                         & Estouro de Stack Limit     \\
 				First Fit Decreasing   & 10                          & 0.121 s                    \\
 				FFD com Rotações       & 10                          & 0.367 s                    \\
 				Largest Area First Fit & 10                          & 0.425 s                    \\
-				\bottomrule
 			\end{tabular}
 		}
 		\caption{Container 20x20x20 com 15 caixas}
@@ -119,7 +143,6 @@
 	\end{itemize}
 \end{frame}
 
-% Conclusões
 \section{Conclusões}
 \begin{frame}{Conclusões}
 	\begin{itemize}

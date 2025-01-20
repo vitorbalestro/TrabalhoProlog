@@ -1,0 +1,16 @@
+Bruno:
+	1. introdução e conteúdos
+	2. apresentação do problema
+	3. modelagem do problema
+Ju:
+	4. representação em prolog
+	5. benchmark força bruta
+Bruno:
+	6. FFD
+	7. FFD com rotação
+Vitor:
+	8. LAFF
+	9. Resultados
+Ju:
+	10. Heurísticas de Custo
+	11. Conclusões
