@@ -13,4 +13,8 @@ Vitor:
 	9. Resultados
 Ju:
 	10. Heurísticas de Custo
-	11. Conclusões
+Geral:
+	11. Dificuldades enfrentadas
+	12. Dificuldades enfrentadas
+Conclusão:
+	13. Heurísticas de Custo
